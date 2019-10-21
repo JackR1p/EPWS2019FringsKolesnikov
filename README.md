@@ -1,5 +1,5 @@
-# EPWS2019FringsKolesnikov
-EP Projekt WiSe 2019
+# EPWS2019/20FringsKolesnikov
+EP Projekt WiSe 2019/2020
 
 ## Problemraum
 Eine hohe Lebensmittelverschwendung im normalen Haushalt rührt oft daher, dass die Menschen eine schlechte bis keine genaue Übersicht über ihren Inhalt im Kühlschrank haben und daher aufgrund von Überschreitung der Mindesthaltbarkeit ihre Lebensmittel in den Müll werfen. Hinzu kommt auch ein geringes Wissen über Verwendbarkeit von einzelnen Zutaten bzw. wie man aus deren Zusammenspiel bestimmte Gerichte zubereiten kann.  
