@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="design.css">
+<html>
+<head>
+	<title>Smartfridge Simulation</title>
+</head>
+<body>
+	<header id="backround">
+		<header id="head">
+			<div id="headline">
+				Overview
+			</div>
+		</header>
+
+		<section id="list_section">
+			<ul id="list"></ul>
+
+			<div id="leer">
+				
+			</div>
+
+		</section>
+
+			<form class="myform">
+			<div class="form-gruppe">
+			<label>Name des Produkts *</label>
+			<input id="name" type="text" name="Produkt_name" placeholder="Name">
+			</div>
+
+			<div class="form-gruppe">
+			<label>Haltbarkeitsdatum *</label>
+			<input id="haltbarkeit" type="date" name="haltbarkeit">
+			</div>
+			</form>
+
+			<input onclick="addLi()" id="hinzu" type="submit" name="add" value="Hinzufuegen">
+
+			<script type="text/javascript">
+				function addLi(){
+					var textVal = document.getElementById('name').value;
+					var hd = document.getElementById('haltbarkeit').value;
+					listNode = document.getElementById('list');
+					liNode = document.createElement("LI");
+					txtNode = document.createTextNode("Name: "+textVal+", Haltbarkeitsdatum: "+hd);
+
+					liNode.appendChild(txtNode);
+					listNode.appendChild(liNode);
+				}
+			</script>
+
+			<br>
+			<br>
+			<input id="scanText" type="text" name="scanText">
+			<br>
+			<input onclick="scanID()" id="scan" type="submit" name="scan" value="Einscannen">
+
+			<script type="text/javascript">
+				function scanID(){
+					var id = document.getElementById('scanText').value;
+
+					var knoppas = 40358802;
+					if(id == knoppas){
+						listNode = document.getElementById('list');
+						liNode = document.createElement("LI");
+						txtNode = document.createTextNode("Name: Knoppas, Marke: Storck");
+
+						liNode.appendChild(txtNode);
+						listNode.appendChild(liNode);
+				}
+				}
+
+			</script>
+
+	</header>
+</body>
+</html>

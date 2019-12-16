@@ -1,0 +1,65 @@
+#backround{
+	background-color: #f4f4f4;
+	font-family: Sans-serif;
+	width: 550px;
+	height: 860px; 
+	margin-left: 30%;
+	border: 1px black solid;
+}
+
+#head{
+	background-color: teal;
+	font-size: 24px;
+	height: 60px;
+	text-align: center;
+	border-bottom: 1px black solid;
+}
+
+#headline{
+	padding-top: 10px;
+	font-size: 40px;
+	text-shadow: 0 0 5px white;
+}
+
+#list_section{
+	border: 1px black solid;
+	margin: 50px 20px 10px 20px;
+	padding-bottom: 400px;
+}
+
+#add{
+	margin: 50px 20px 10px 20px;
+}
+
+#hinzu{
+	margin: 10px 0px 0px 170px;
+	padding: 20px 60px;
+}
+
+.button input{
+	margin: 20px 0px 0px 170px;
+	padding: 20px 60px;
+}
+
+.form-gruppe{
+	padding-bottom: 30px;
+	position: static;
+}
+
+.myform label{
+	display: block;
+}
+
+.myform input{
+	padding: 8px;
+	width: 80%;
+	font-size: 20px;
+}
+
+ul{
+	list-style: none;
+}
+
+section{
+	position: static;
+}
