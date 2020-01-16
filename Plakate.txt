@@ -1,0 +1,5 @@
+- Kurzer Abschnitt der Domäne(Problemraum vorstellen, Vorgehen)
+- REST-Tabelle (System Erläuterung)
+- Darstellung des Vrogehens
+- Abwägungen
+- Fazit (kritischen Reflexion) 
