@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
 router.post('/',(req, res, next) => {
 
     const newId = helpfunctions.generateNewID(produktliste);
-    const haltbarkeit = helpfunctions.berechneHaltbarkeit(new Date(req.body.datum)); //"mm/dd/yyyy"
+    const haltbarkeit = helpfunctions.berechneHaltbarkeit(new Date(req.body.datum)); // "mm/dd/yyyy"
 
     const product = {
         id: newId,
@@ -62,17 +62,22 @@ router.post('/:scanId', (req, res, next) => {
     });
 });
 
-//Get-Request: zeigt ein Produkt mit der eingegebenen ID an
+//Get-Request: zeigt ein Produkt mit der eingegebenen ID an oder greift auf Benutzbare Rezepte zu
 router.get('/:productId', (req, res, next) => {
     const id = req.params.productId;
 
+    //Hier wird nach Rezeptvorschlägen gesucht
     if(id === 'rezepte'){
 
+        const rezeptvorschlag = sucheRezept();
+
         res.status(200).json({
+            Rezepte: rezeptvorschlag,
             message: 'hier werden Rezepte abgerufen'
         });
     }
 
+    //Hier wird ein Produkt mi einer bestimmte ID zurück gegeben
     else{
         const foundProduct = helpfunctions.findProduktByID(produktliste, id);
         
@@ -166,12 +171,14 @@ for (let i = 0; i < produktliste.length; i++) {
 res.send("204 Produkt " + id + " erfolgreich gelöscht").status(204);
 });
 
+//Diese Funktion sortiert die Liste nach der Haltbarkeit der Produkte
 const sortiereNachHaltbarkeit = function(liste) {
 
     for(let h = 0; h < liste.length; h++){
         for(let i = 0; i < liste.length - 1; i++) {
 
             if(liste[i].haltbarkeit > liste[i + 1].haltbarkeit){
+                //die Variable "halter" speichert kurz einen Listen-Eintrag damit dieser nach der Überschreibung nicht verloren geht
                 const halter = liste[i];
                 liste[i] = liste[i + 1];
                 liste[i + 1] = halter;
@@ -180,13 +187,40 @@ const sortiereNachHaltbarkeit = function(liste) {
     }
 }
 
+//Filtert Rezepte aus einer Rezeptliste heraus, die auf den Inhalt des Kühlschranks zutreffen
 const sucheRezept = function(){
 
+    //in dieses Array werden alle passenden Rezepte gespeichert und am Ende ausgegeben
+    const auswahlRezepte = [];
+
+    //In der ersten For-Schleife wird sich ein Rezept angeguckt
     for (let i = 0; i < rezeptliste.length; i++) {
-        for (let j = 1; j < rezeptliste[i])
+
+        //count speichert die Anzahl an zutreffenden Zutaten und wird für jedes Rezept wieder auf 0 gesetzt
+        let count = 0;
+
+        //in der zweiten For-Schleife wird jede Zutat eines Rezepts durchgegangen 
+        for (let j = 0; j < rezeptliste[i].zutaten.length; j++){
+            //In der dritten For-Schleife wird die Produktliste durchgegangen
+            for(let k = 0; k < produktliste.length; k++){
+
+                //Trifft ein Produkt aus der Liste auf eine Zutat des Rezeptes zu, so wird count um 1 erhöht
+                if(produktliste[k].name === rezeptliste[i].zutaten[j].name){
+                    count ++;
+                }
+            }
+        }
+        //Ist mehr als ein Produkt in der Liste enthalten das zur Zubereitung eines Rezeptes genutzt werden kann,
+        //so wird dieses Rezept zur Ausgabe hinzugefügt
+        if(count >= 2){
+            auswahlRezepte.push(rezeptliste[i]);
+        }
     }
+    //alle Verfügbaren Rezepte werden zurückgegeben
+    return auswahlRezepte;
 }
 
+//Diese Funktion speichert neue Produkte in die lokale Datenbank
 const saveData = function () {
     fs.writeFile('produktliste.json', JSON.stringify(produktliste), function (error) {
         if (error) throw error;
