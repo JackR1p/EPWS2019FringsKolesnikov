@@ -9,6 +9,14 @@ const rezeptliste = require('../../rezeptliste');
 
 //Get Request auf alle Produkte
 router.get('/', (req, res, next) => {
+
+    if(produktliste.length === 0){
+        res.status(200).json({
+            message: "Die Produktliste ist leer"
+        });
+        return;
+    }
+
     res.status(200).json({
         ProdukListe: produktliste
     });
@@ -16,6 +24,30 @@ router.get('/', (req, res, next) => {
 
 //Post Request: erstellt neuen Produkteintrag durch Eingabe
 router.post('/',(req, res, next) => {
+
+    if (req.body.name == undefined) {
+        res.status(400).json({
+            message: "Missing body in this POST",
+            missing: "name"
+        });
+        return;
+    }
+
+    if (req.body.marke == undefined) {
+        res.status(400).json({
+            message: "Missing body in this POST",
+            missing: "marke"
+        });
+        return;
+    }
+
+    if (req.body.datum == undefined) {
+        res.status(400).json({
+            message: "Missing body in this POST",
+            missing: "datum"
+        });
+        return;
+    }
 
     const newId = helpfunctions.generateNewID(produktliste);
     const haltbarkeit = helpfunctions.berechneHaltbarkeit(new Date(req.body.datum)); // "mm/dd/yyyy"
@@ -31,7 +63,7 @@ router.post('/',(req, res, next) => {
     sortiereNachHaltbarkeit(produktliste);
     saveData();
 
-    res.status(200).json({
+    res.status(201).json({
         message: 'Produkt wurde der Liste hinzugefügt',
         createdProduct: product
     });
@@ -42,8 +74,19 @@ router.post('/:scanId', (req, res, next) => {
 
     const scanId = parseInt(req.params.scanId);
     const foundProduct = helpfunctions.findProduktByID(scanliste, scanId);
+
+    if (!foundProduct) {
+        res.status(404).json({
+            message: "404 Not Found",
+            missing: "Das Produkt mit der scanId "+ scanId +" existiert nicht"
+        });
+        return;
+    }
+
     const newId = helpfunctions.generateNewID(produktliste);
     const haltbarkeit = helpfunctions.berechneHaltbarkeit(new Date(req.body.datum)); //"mm/dd/yyyy"
+
+
 
     const product = {
         id: newId,
@@ -56,7 +99,7 @@ router.post('/:scanId', (req, res, next) => {
     sortiereNachHaltbarkeit(produktliste);
     saveData();
 
-    res.status(200).json({
+    res.status(201).json({
         message: 'Produkt wurde der Liste durch scan hinzugefügt',
         createdProduct: product
     });
@@ -69,6 +112,14 @@ router.get('/:productId', (req, res, next) => {
     //Hier wird nach Rezeptvorschlägen gesucht
     if(id === 'rezepte'){
 
+        if(produktliste.length === 0){
+            res.status(404).json({
+                message: "404 Not Found",
+                missing: "Es wurden keine Produkte in der Liste gefunden"
+            });
+            return;
+        }
+
         const rezeptvorschlag = sucheRezept();
 
         res.status(200).json({
@@ -77,7 +128,7 @@ router.get('/:productId', (req, res, next) => {
         });
     }
 
-    //Hier wird ein Produkt mi einer bestimmte ID zurück gegeben
+    //Hier wird ein Produkt mit einer bestimmte ID zurück gegeben
     else{
         const foundProduct = helpfunctions.findProduktByID(produktliste, id);
         
